@@ -1,0 +1,21 @@
+{
+  "name": "draftjs-custom-block-demo-forked",
+  "version": "0.0.0",
+  "description": null,
+  "keywords": [],
+  "main": "index.js",
+  "dependencies": {
+    "draft-js": "0.10.4",
+    "react": "16.2.0",
+    "react-dom": "16.2.0"
+  },
+  "devDependencies": {
+    "react-scripts": "1.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
