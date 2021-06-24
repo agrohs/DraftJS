@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { render } from 'react-dom'
+import classNames from 'classnames'
+
 import './styles.css'
 
 import { Editor, EditorState, AtomicBlockUtils } from 'draft-js'
@@ -14,10 +16,10 @@ const Agnoponent = ({ blockProps, block, contentState }) => {
   const { provider, mention } = contentState.getEntity(entity).getData()
 
   return (
-    <div editable="false" {...blockProps}>
+    <span editable="false" {...blockProps}>
       <b>{provider}</b>
       <span>{mention}</span>
-    </div>
+    </span>
   )
 }
 
@@ -28,6 +30,9 @@ const blockRenderer = (block) => {
     return {
       component: Agnoponent,
       editable: false,
+      props: {
+        className: classNames('inline', 'blue'),
+      },
     }
   }
   return null

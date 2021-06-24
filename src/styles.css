@@ -1,0 +1,12 @@
+figure {
+  margin: 0;
+}
+
+[data-contents='true'] {
+  display: inline-flex;
+}
+
+.blue {
+  background-color: blue;
+  color: white;
+}

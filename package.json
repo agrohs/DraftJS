@@ -5,6 +5,7 @@
   "keywords": [],
   "main": "index.js",
   "dependencies": {
+    "classnames": "2.3.1",
     "draft-js": "0.11.7",
     "react": "17.0.2",
     "react-dom": "17.0.2"
