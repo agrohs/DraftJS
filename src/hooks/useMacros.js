@@ -150,9 +150,9 @@ export default () => {
     plugins,
     addOns,
     addOnProps,
-    blockRenderer,
     editorState,
     handleKeyCommand,
+    blockRendererFn: blockRenderer,
     onChange: setEditorState,
   }
 
