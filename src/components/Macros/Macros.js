@@ -1,9 +1,6 @@
 import React from 'react'
 
-import Editor from '@draft-js-plugins/editor'
-
 import { useMacros } from '../../hooks'
-import { blockRenderer } from '../../utils/render'
 import {
   MacrosWrapper,
   EditorWrapper,
@@ -12,21 +9,16 @@ import {
   Code,
 } from './Macros.style'
 
+import MacroEditor from '../MacroEditor/MacroEditor'
+
 export default () => {
-  const {
-    editorState,
-    setEditorState,
-    plugins,
-    addOns,
-    addOnProps,
-    toJSON,
-    actions,
-  } = useMacros()
+  const { actions, editorProps, toJSON } = useMacros()
 
   return (
     <MacrosWrapper>
       {Object.entries(actions).map(([name, action]) => (
         <ActionButton
+          key={name}
           onClick={() =>
             action({
               provider: 'Bob',
@@ -38,19 +30,7 @@ export default () => {
         </ActionButton>
       ))}
       <EditorWrapper>
-        <div>
-          <Editor
-            spellCheck
-            plugins={plugins}
-            editorState={editorState}
-            onChange={setEditorState}
-            // handleKeyCommand={handleKeyCommand}
-            blockRendererFn={blockRenderer}
-          />
-          {addOns.map((AddOn, index) => (
-            <AddOn key={`add-on-${index}`} {...addOnProps} />
-          ))}
-        </div>
+        <MacroEditor {...editorProps} />
       </EditorWrapper>
       <h3>ContentState</h3>
       <DebugWrapper>

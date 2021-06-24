@@ -2,37 +2,36 @@ import React, { useState, useMemo } from 'react'
 import {
   AtomicBlockUtils,
   convertToRaw,
-  Editor,
   EditorState,
   RichUtils,
 } from 'draft-js'
 import createMentionPlugin from '@draft-js-plugins/mention'
 
+import { blockRenderer } from '../utils/render'
 import { ensureArray, lowercase } from '../utils/display'
+import { MacroTextReplacement, MacroMentionSuggestion } from '../components'
 import {
   SAMPLE_REPLACEMENTS,
   SAMPLE_MENTIONS,
   RICH_TEXT_EDITOR_MENTION_REGEX,
 } from '../utils/mentions'
-import { MacroTextReplacement, MacroMentionSuggestion } from '../components'
 
-const findWithRegex = (regex, contentBlock, callback) => {
-  const text = contentBlock.getText()
-  let matchArr
-  let start
-  let end
+// const findWithRegex = (regex, contentBlock, callback) => {
+//   const text = contentBlock.getText()
+//   let matchArr
+//   let start
+//   let end
 
-  while ((matchArr = regex.exec(text)) !== null) {
-    start = matchArr.index
-    end = start + matchArr[0].length
-    callback(start, end)
-  }
-}
+//   while ((matchArr = regex.exec(text)) !== null) {
+//     start = matchArr.index
+//     end = start + matchArr[0].length
+//     callback(start, end)
+//   }
+// }
 
 export default () => {
   const [filteredMentions, setFilteredMentions] = useState(SAMPLE_MENTIONS)
   const [mentionsOpen, setMentionsOpen] = useState(false)
-  console.log(`>>> > mentionsOpen`, mentionsOpen)
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty(),
   )
@@ -147,13 +146,19 @@ export default () => {
     onOpen: setMentionsOpen,
   }
 
-  return {
-    toJSON,
-    editorState,
-    setEditorState,
+  const editorProps = {
     plugins,
     addOns,
     addOnProps,
+    blockRenderer,
+    editorState,
+    handleKeyCommand,
+    onChange: setEditorState,
+  }
+
+  return {
+    toJSON,
+    editorProps,
     actions: {
       insertBlock,
     },
