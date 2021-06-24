@@ -1,6 +1,6 @@
 import React, { useLayoutEffect } from 'react'
 
-const MacroTextReplacement = ({
+export default ({
   setMentionsOpen = () => {},
   children = null,
 }) => {
@@ -10,5 +10,3 @@ const MacroTextReplacement = ({
 
   return children
 }
-
-export default MacroTextReplacement

@@ -16,8 +16,8 @@ export default ({ blockProps, block, contentState }) => {
   return (
     <BlockWrapper editable="false" {...blockProps}>
       <Tag>
-        <span>
-          {provider}: {mention}
+        <span className={provider}>
+          {mention}
         </span>
       </Tag>
     </BlockWrapper>

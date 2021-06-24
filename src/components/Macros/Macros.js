@@ -12,7 +12,7 @@ import {
 import MacroEditor from '../MacroEditor/MacroEditor'
 
 export default () => {
-  const { actions, editorProps, toJSON } = useMacros()
+  const { actions, editorProps, toJSON, toText } = useMacros()
 
   return (
     <MacrosWrapper>
@@ -33,6 +33,9 @@ export default () => {
         <MacroEditor {...editorProps} />
       </EditorWrapper>
       <h3>ContentState</h3>
+      <DebugWrapper>
+        {toText()}
+      </DebugWrapper>
       <DebugWrapper>
         <Code>{toJSON()}</Code>
       </DebugWrapper>
