@@ -1,6 +1,7 @@
 import React from 'react'
-import { Macros } from './components'
 import { ThemeProvider } from '@zendeskgarden/react-theming'
+
+import { Macros } from './components'
 
 import './base.css'
 
