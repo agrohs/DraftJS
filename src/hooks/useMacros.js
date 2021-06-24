@@ -10,10 +10,10 @@ import createMentionPlugin from '@draft-js-plugins/mention'
 
 import { ensureArray, lowercase } from '../utils/display'
 import {
-  mentions,
-  replacements,
+  SAMPLE_REPLACEMENTS,
+  SAMPLE_MENTIONS,
   RICH_TEXT_EDITOR_MENTION_REGEX,
-} from '../utils/display'
+} from '../utils/mentions'
 import { MacroTextReplacement, MacroMentionSuggestion } from '../components'
 
 const findWithRegex = (regex, contentBlock, callback) => {
@@ -30,8 +30,9 @@ const findWithRegex = (regex, contentBlock, callback) => {
 }
 
 export default () => {
-  const [filteredMentions, setFilteredMentions] = useState(mentions)
-  const [mentionsOpen, setMentionsOpen] = useState(false)
+  const [filteredMentions, setFilteredMentions] = useState(SAMPLE_MENTIONS)
+  const [mentionsOpen, setMentionsOpen] = useState(true)
+  console.log(`>>> > mentionsOpen`, mentionsOpen)
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty(),
   )
@@ -49,7 +50,7 @@ export default () => {
     //       },
     //       component: (props) => (
     //         <MacroTextReplacement
-    //           replacements={replacements}
+    //           SAMPLE_REPLACEMENTS={SAMPLE_REPLACEMENTS}
     //           setMentionsOpen={setMentionsOpen}
     //           {...props}
     //         />
@@ -66,20 +67,21 @@ export default () => {
 
     const { MentionSuggestions } = mentionPlugin
 
-    const _addOns = (
+    const MacroMentions = ({ mentions, mentionsOpen, onOpen, onChange, ...renderProps}) => (
       <MentionSuggestions
-        open={mentionsOpen}
-        suggestions={filteredMentions}
         entryComponent={MacroMentionSuggestion}
-        onOpenChange={setMentionsOpen}
-        onSearchChange={handleSearchChange}
+        suggestions={mentions}
+        open={mentionsOpen}
+        onOpenChange={onOpen}
+        onSearchChange={onChange}
+        {...renderProps}
       />
     )
 
     return {
-      plugins: [mentionPlugin],
       // plugins: [decoratorPlugin, mentionPlugin],
-      addOns: _addOns,
+      plugins: [mentionPlugin],
+      addOns: [MacroMentions],
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -103,7 +105,7 @@ export default () => {
 
   const handleSearchChange = ({ value }) => {
     setFilteredMentions(
-      ensureArray(mentions).filter(({ name }) =>
+      ensureArray(SAMPLE_MENTIONS).filter(({ name }) =>
         lowercase(name).includes(lowercase(value)),
       ),
     )
@@ -132,6 +134,14 @@ export default () => {
 
   //#endregion ACTIONS
 
+
+  const addOnProps = {
+    mentions: filteredMentions,
+    mentionsOpen,
+    onChange: handleSearchChange,
+    onOpen: setMentionsOpen
+  }
+
   const RTEEditor = ({ children, ...editorProps }) => (
     <div>
       <Editor
@@ -142,7 +152,9 @@ export default () => {
         handleKeyCommand={handleKeyCommand}
         {...editorProps}
       />
-      {addOns}
+      {addOns.map((AddOn, index) => (
+        <AddOn key={`add-on-${index}`} {...addOnProps } />
+      ))}
       {children}
     </div>
   )

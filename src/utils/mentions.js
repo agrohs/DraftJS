@@ -28,7 +28,7 @@ export const RICH_TEXT_EDITOR_MENTION_REGEX = [
   ']',
 ].join('')
 
-export const mentions = [
+export const SAMPLE_MENTIONS = [
   { name: '{{order.date}}', title: 'order.date' },
   { name: '{{order.total}}', title: 'order.total' },
   { name: '{{order.status}}', title: 'order.status' },
@@ -36,7 +36,7 @@ export const mentions = [
   { name: '{{shipping.status}}', title: 'shipping.status' },
 ]
 
-export const replacements = {
+export const SAMPLE_REPLACEMENTS = {
   order: {
     date: 'Jun 23, 2021',
     total: '$400',
