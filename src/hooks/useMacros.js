@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react'
 import {
   AtomicBlockUtils,
   convertToRaw,
-  Editor,
   EditorState,
   RichUtils,
 } from 'draft-js'
@@ -17,18 +16,18 @@ import {
   RICH_TEXT_EDITOR_MENTION_REGEX,
 } from '../utils/mentions'
 
-const findWithRegex = (regex, contentBlock, callback) => {
-  const text = contentBlock.getText()
-  let matchArr
-  let start
-  let end
+// const findWithRegex = (regex, contentBlock, callback) => {
+//   const text = contentBlock.getText()
+//   let matchArr
+//   let start
+//   let end
 
-  while ((matchArr = regex.exec(text)) !== null) {
-    start = matchArr.index
-    end = start + matchArr[0].length
-    callback(start, end)
-  }
-}
+//   while ((matchArr = regex.exec(text)) !== null) {
+//     start = matchArr.index
+//     end = start + matchArr[0].length
+//     callback(start, end)
+//   }
+// }
 
 export default () => {
   const [filteredMentions, setFilteredMentions] = useState(SAMPLE_MENTIONS)
@@ -153,8 +152,8 @@ export default () => {
     addOnProps,
     blockRenderer,
     editorState,
-    onChange: setEditorState,
     handleKeyCommand,
+    onChange: setEditorState,
   }
 
   return {
