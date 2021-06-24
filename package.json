@@ -5,10 +5,14 @@
   "keywords": [],
   "main": "index.js",
   "dependencies": {
+    "@zendeskgarden/css-bedrock": "9.0.0",
+    "@zendeskgarden/css-variables": "6.4.5",
+    "@zendeskgarden/react-theming": "8.38.0",
     "classnames": "2.3.1",
     "draft-js": "0.11.7",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "styled-components": "5.3.0"
   },
   "devDependencies": {
     "react-scripts": "1.0.0"
