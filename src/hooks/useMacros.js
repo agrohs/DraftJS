@@ -110,13 +110,13 @@ export default () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    ensureArray(plugins).forEach((plugin) => {
-      if (plugin.store) {
-        plugin.store.setEditorState(editorState)
-      }
-    })
-  }, [editorState, plugins])
+  // useEffect(() => {
+  //   ensureArray(plugins).forEach((plugin) => {
+  //     if (plugin.store) {
+  //       plugin.store.setEditorState(editorState)
+  //     }
+  //   })
+  // }, [editorState, plugins])
 
   const toJSON = () => {
     const contentState = editorState.getCurrentContent()
