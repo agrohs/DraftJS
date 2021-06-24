@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { Button } from '@zendeskgarden/react-buttons'
+
 import { useMacros } from '../../hooks'
 import { blockRenderer } from '../../utils/render'
 import { MacrosWrapper, EditorWrapper } from './Macros.style'
@@ -9,7 +11,7 @@ export default () => {
 
   return (
     <MacrosWrapper>
-      <button
+      <Button
         onClick={() =>
           insertBlock({
             provider: 'Bob',
@@ -18,7 +20,7 @@ export default () => {
         }
       >
         Insert block
-      </button>
+      </Button>
       <EditorWrapper>
         <Editor
           // plugins={plugins} // TODO bring back later

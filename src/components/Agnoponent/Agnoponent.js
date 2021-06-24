@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { Tag } from '@zendeskgarden/react-tags'
+
 import { BlockWrapper } from './Agnoponent.style'
 
 export default ({ blockProps, block, contentState }) => {
@@ -13,8 +15,11 @@ export default ({ blockProps, block, contentState }) => {
 
   return (
     <BlockWrapper editable="false" {...blockProps}>
-      <b>{provider}</b>
-      <span>{mention}</span>
+      <Tag>
+        <span>
+          {provider}: {mention}
+        </span>
+      </Tag>
     </BlockWrapper>
   )
 }

@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import { zdColorGrey400, zdColorGrey200 } from '@zendeskgarden/css-variables'
+
+import { Well } from '@zendeskgarden/react-notifications'
 
 export const MacrosWrapper = styled.div`
   figure {
@@ -19,7 +20,8 @@ export const MacrosWrapper = styled.div`
   }
 `
 
-export const EditorWrapper = styled.div`
-  border: 1px solid ${zdColorGrey400};
-  background-color: ${zdColorGrey200};
+export const EditorWrapper = styled(Well)`
+  ${({ theme: { space } }) => `
+    padding: ${space.sm};  
+  `}
 `
