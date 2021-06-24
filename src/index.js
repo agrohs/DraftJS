@@ -38,16 +38,13 @@ const App = () => {
     EditorState.createEmpty(),
   )
 
-  const insertBlock = () => {
+  const insertBlock = (data) => {
     const contentState = editorState.getCurrentContent()
 
     const contentStateWithEntity = contentState.createEntity(
       'TOKEN',
       'IMMUTABLE',
-      {
-        provider: 'Magento',
-        mention: '{{bobn}}',
-      },
+      data,
     )
 
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey()
@@ -62,7 +59,16 @@ const App = () => {
 
   return (
     <div>
-      <button onClick={insertBlock}>Insert block</button>
+      <button
+        onClick={() =>
+          insertBlock({
+            provider: 'Magento',
+            mention: '{{bobn}}',
+          })
+        }
+      >
+        Insert block
+      </button>
       <Editor
         spellCheck
         // plugins={plugins} // TODO bring back later
