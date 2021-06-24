@@ -1,6 +1,11 @@
 import React from 'react'
 import { Macros } from './components'
+import { ThemeProvider } from '@zendeskgarden/react-theming'
 
-export const App = () => {
-  return <Macros />
-}
+import './base.css'
+
+export const App = () => (
+  <ThemeProvider>
+    <Macros />
+  </ThemeProvider>
+)
