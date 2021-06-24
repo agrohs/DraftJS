@@ -11,20 +11,26 @@ import {
 } from './Macros.style'
 
 export default () => {
-  const { insertBlock, contentAsJSON, Editor } = useMacros()
+  const {
+    Editor,
+    toJSON,
+    actions,
+  } = useMacros()
 
   return (
     <MacrosWrapper>
-      <ActionButton
-        onClick={() =>
-          insertBlock({
-            provider: 'Bob',
-            mention: '{{isuruncle}}',
-          })
-        }
-      >
-        Insert block
-      </ActionButton>
+      {Object.entries(actions).map(([name, action]) => (
+        <ActionButton
+          onClick={() =>
+            action({
+              provider: 'Bob',
+              mention: '{{isuruncle}}',
+            })
+          }
+        >
+          {name}
+        </ActionButton>
+      ))}
       <EditorWrapper>
         <Editor
           // plugins={plugins} // TODO bring back later
@@ -33,7 +39,7 @@ export default () => {
       </EditorWrapper>
       <h3>ContentState</h3>
       <DebugWrapper>
-        <Code>{contentAsJSON()}</Code>
+        <Code>{toJSON()}</Code>
       </DebugWrapper>
     </MacrosWrapper>
   )
