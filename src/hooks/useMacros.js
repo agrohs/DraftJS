@@ -8,13 +8,17 @@ import {
 } from 'draft-js'
 import createMentionPlugin from '@draft-js-plugins/mention'
 
+import { blockRenderer } from '../utils/render'
 import { ensureArray, lowercase } from '../utils/display'
+import {
+  MacroTextReplacement,
+  MacroMentionSuggestion,
+} from '../components'
 import {
   SAMPLE_REPLACEMENTS,
   SAMPLE_MENTIONS,
   RICH_TEXT_EDITOR_MENTION_REGEX,
 } from '../utils/mentions'
-import { MacroTextReplacement, MacroMentionSuggestion } from '../components'
 
 const findWithRegex = (regex, contentBlock, callback) => {
   const text = contentBlock.getText()
@@ -32,7 +36,6 @@ const findWithRegex = (regex, contentBlock, callback) => {
 export default () => {
   const [filteredMentions, setFilteredMentions] = useState(SAMPLE_MENTIONS)
   const [mentionsOpen, setMentionsOpen] = useState(false)
-  console.log(`>>> > mentionsOpen`, mentionsOpen)
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty(),
   )
@@ -147,13 +150,19 @@ export default () => {
     onOpen: setMentionsOpen,
   }
 
-  return {
-    toJSON,
-    editorState,
-    setEditorState,
+  const editorProps = {
     plugins,
     addOns,
     addOnProps,
+    blockRenderer,
+    editorState,
+    onChange: setEditorState,
+    handleKeyCommand
+  }
+
+  return {
+    toJSON,
+    editorProps,
     actions: {
       insertBlock,
     },
