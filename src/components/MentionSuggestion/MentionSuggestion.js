@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react'
 
 import { ensureObject } from '../../utils/display'
-import { Suggestion } from './MacroMentionSuggestion.style'
+import { Suggestion } from './MentionSuggestion.style'
 
-const MentionSuggestion = (props) => {
+export default (props) => {
   const { mention: { title } = {}, isFocused, ...parentProps } = ensureObject(
     props,
   )
@@ -33,5 +33,3 @@ const MentionSuggestion = (props) => {
     </Suggestion>
   )
 }
-
-export default MentionSuggestion
