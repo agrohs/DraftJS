@@ -5,6 +5,7 @@
   "keywords": [],
   "main": "index.js",
   "dependencies": {
+    "@draft-js-plugins/editor": "4.1.0",
     "@draft-js-plugins/mention": "4.5.2",
     "@zendeskgarden/container-utilities": "^0.5.4",
     "@zendeskgarden/css-bedrock": "^8.x",

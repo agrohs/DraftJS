@@ -31,7 +31,7 @@ const findWithRegex = (regex, contentBlock, callback) => {
 
 export default () => {
   const [filteredMentions, setFilteredMentions] = useState(SAMPLE_MENTIONS)
-  const [mentionsOpen, setMentionsOpen] = useState(true)
+  const [mentionsOpen, setMentionsOpen] = useState(false)
   console.log(`>>> > mentionsOpen`, mentionsOpen)
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty(),
@@ -67,7 +67,13 @@ export default () => {
 
     const { MentionSuggestions } = mentionPlugin
 
-    const MacroMentions = ({ mentions, mentionsOpen, onOpen, onChange, ...renderProps}) => (
+    const MacroMentions = ({
+      mentions,
+      mentionsOpen,
+      onOpen,
+      onChange,
+      ...renderProps
+    }) => (
       <MentionSuggestions
         entryComponent={MacroMentionSuggestion}
         suggestions={mentions}
@@ -134,36 +140,22 @@ export default () => {
 
   //#endregion ACTIONS
 
-
   const addOnProps = {
     mentions: filteredMentions,
     mentionsOpen,
     onChange: handleSearchChange,
-    onOpen: setMentionsOpen
+    onOpen: setMentionsOpen,
   }
-
-  const RTEEditor = ({ children, ...editorProps }) => (
-    <div>
-      <Editor
-        spellCheck
-        plugins={plugins}
-        editorState={editorState}
-        onChange={setEditorState}
-        handleKeyCommand={handleKeyCommand}
-        {...editorProps}
-      />
-      {addOns.map((AddOn, index) => (
-        <AddOn key={`add-on-${index}`} {...addOnProps } />
-      ))}
-      {children}
-    </div>
-  )
 
   return {
     toJSON,
+    editorState,
+    setEditorState,
+    plugins,
+    addOns,
+    addOnProps,
     actions: {
       insertBlock,
     },
-    Editor: RTEEditor,
   }
 }
