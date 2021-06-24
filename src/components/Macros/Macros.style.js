@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import { Well } from '@zendeskgarden/react-notifications'
+import { Button } from '@zendeskgarden/react-buttons'
 
 export const MacrosWrapper = styled.div`
   figure {
@@ -25,3 +26,13 @@ export const EditorWrapper = styled(Well)`
     padding: ${space.sm};  
   `}
 `
+
+export const ActionButton = styled(Button).attrs(() => ({
+  size: 'small',
+}))``
+
+export const DebugWrapper = styled(EditorWrapper).attrs(() => ({
+  isRecessed: true,
+}))``
+
+export const Code = styled.pre``

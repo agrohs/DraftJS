@@ -1,17 +1,21 @@
 import React from 'react'
 
-import { Button } from '@zendeskgarden/react-buttons'
-
 import { useMacros } from '../../hooks'
 import { blockRenderer } from '../../utils/render'
-import { MacrosWrapper, EditorWrapper } from './Macros.style'
+import {
+  MacrosWrapper,
+  EditorWrapper,
+  ActionButton,
+  DebugWrapper,
+  Code,
+} from './Macros.style'
 
 export default () => {
   const { insertBlock, contentAsJSON, Editor } = useMacros()
 
   return (
     <MacrosWrapper>
-      <Button
+      <ActionButton
         onClick={() =>
           insertBlock({
             provider: 'Bob',
@@ -20,7 +24,7 @@ export default () => {
         }
       >
         Insert block
-      </Button>
+      </ActionButton>
       <EditorWrapper>
         <Editor
           // plugins={plugins} // TODO bring back later
@@ -28,7 +32,9 @@ export default () => {
         />
       </EditorWrapper>
       <h3>ContentState</h3>
-      <pre id="raw-display">{contentAsJSON()}</pre>
+      <DebugWrapper>
+        <Code>{contentAsJSON()}</Code>
+      </DebugWrapper>
     </MacrosWrapper>
   )
 }
