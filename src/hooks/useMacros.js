@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useCallback, useEffect, useLayoutEffect } from 'react'
 import {
   AtomicBlockUtils,
   convertToRaw,
@@ -9,7 +9,8 @@ import createMentionPlugin from '@draft-js-plugins/mention'
 
 import { blockRenderer } from '../utils/render'
 import { ensureArray, lowercase } from '../utils/display'
-import { MacroTextReplacement, MacroMentionSuggestion } from '../components'
+import { MentionSuggestion } from '../components'
+// import { MacroTextReplacement, MentionSuggestion } from '../components'
 import {
   SAMPLE_REPLACEMENTS,
   SAMPLE_MENTIONS,
@@ -35,6 +36,10 @@ export default () => {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty(),
   )
+
+  const wrappedInsertBlock = useCallback((data) => (
+    insertBlock(data)
+  ), [editorState])
 
   const { addOns, plugins } = useMemo(() => {
     // const decoratorPlugin = {
@@ -62,6 +67,20 @@ export default () => {
       // TODO: optimize the regex?
       mentionRegExp: RICH_TEXT_EDITOR_MENTION_REGEX,
       entityMutability: 'IMMUTABLE',
+      mentionComponent: ({ children, entityKey, decoratedText, ...foo }) => {
+        console.log(`>>> > Foo > fooz`, foo)
+        console.log(`>>> > Foo > decoratedText`, decoratedText)
+        console.log(`>>> > Foo > entityKey`, entityKey)
+    
+        useLayoutEffect(() => {
+          wrappedInsertBlock({
+            provider: 'Bob',
+            mention: decoratedText,
+          })
+        }, [])
+    
+        return (children)
+      },
     })
 
     const { MentionSuggestions } = mentionPlugin
@@ -74,7 +93,7 @@ export default () => {
       ...renderProps
     }) => (
       <MentionSuggestions
-        entryComponent={MacroMentionSuggestion}
+        entryComponent={MentionSuggestion}
         suggestions={mentions}
         open={mentionsOpen}
         onOpenChange={onOpen}
@@ -91,9 +110,22 @@ export default () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  useEffect(() => {
+    ensureArray(plugins).forEach((plugin) => {
+      if (plugin.store) {
+        plugin.store.setEditorState(editorState)
+      }
+    })
+  }, [editorState, plugins])
+
   const toJSON = () => {
     const contentState = editorState.getCurrentContent()
     return JSON.stringify(convertToRaw(contentState), null, 2)
+  }
+
+  const toText = () => {
+    const contentState = editorState.getCurrentContent()
+    return contentState.getPlainText()
   }
 
   // TODO do we need this?
@@ -119,6 +151,7 @@ export default () => {
   //#region ACTIONS
 
   const insertBlock = (data) => {
+    const { mention = ' ' } = data
     const contentState = editorState.getCurrentContent()
 
     const contentStateWithEntity = contentState.createEntity(
@@ -133,7 +166,7 @@ export default () => {
     })
 
     setEditorState(
-      AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, ' '),
+      AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, mention),
     )
   }
 
@@ -157,6 +190,7 @@ export default () => {
   }
 
   return {
+    toText,
     toJSON,
     editorProps,
     actions: {
