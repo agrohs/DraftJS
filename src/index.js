@@ -65,7 +65,7 @@ const App = () => {
       <button onClick={insertBlock}>Insert block</button>
       <Editor
         spellCheck
-        // plugins={plugins}
+        // plugins={plugins} // TODO bring back later
         editorState={editorState}
         onChange={setEditorState}
         blockRendererFn={blockRenderer}
