@@ -5,13 +5,10 @@
   "keywords": [],
   "main": "index.js",
   "dependencies": {
-    "classnames": "latest",
-    "draft-js": "latest",
-    "react": "latest",
-    "react-dom": "latest",
-    "styled-components": "latest",
+    "@draft-js-plugins/mention": "4.5.2",
     "@zendeskgarden/container-utilities": "^0.5.4",
     "@zendeskgarden/css-bedrock": "^8.x",
+    "@zendeskgarden/css-variables": "6.4.5",
     "@zendeskgarden/react-accordions": "^8.x",
     "@zendeskgarden/react-avatars": "^8.x",
     "@zendeskgarden/react-breadcrumbs": "^8.x",
@@ -31,7 +28,12 @@
     "@zendeskgarden/react-theming": "^8.x",
     "@zendeskgarden/react-tooltips": "^8.x",
     "@zendeskgarden/react-typography": "^8.x",
-    "@zendeskgarden/svg-icons": "^6.x"
+    "@zendeskgarden/svg-icons": "^6.x",
+    "classnames": "latest",
+    "draft-js": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "styled-components": "latest"
   },
   "devDependencies": {
     "react-scripts": "1.0.0"
