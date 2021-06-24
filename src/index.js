@@ -1,9 +1,10 @@
-import React, { Fragment } from 'react'
+import React, { useState } from 'react'
 import { render } from 'react-dom'
 import './styles.css'
+
 import { Editor, EditorState, AtomicBlockUtils } from 'draft-js'
 
-const MyComponent = ({ blockProps, block, contentState }) => {
+const Agnoponent = ({ blockProps, block, contentState }) => {
   const entity = block.getEntityAt(0)
 
   if (!entity) {
@@ -11,8 +12,9 @@ const MyComponent = ({ blockProps, block, contentState }) => {
   }
 
   const { provider, mention } = contentState.getEntity(entity).getData()
+
   return (
-    <div editable="false">
+    <div editable="false" {...blockProps}>
       <b>{provider}</b>
       <span>{mention}</span>
     </div>
@@ -24,38 +26,19 @@ const blockRenderer = (block) => {
   console.log('block', block)
   if (type === 'atomic') {
     return {
-      component: MyComponent,
+      component: Agnoponent,
       editable: false,
     }
   }
   return null
 }
 
-class App extends React.Component {
-  state = {
-    editorState: EditorState.createEmpty(),
-  }
+const App = () => {
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty(),
+  )
 
-  render() {
-    const { editorState } = this.state
-
-    return (
-      <Fragment>
-        <button onClick={this.insertBlock}>Insert block</button>
-        <Editor
-          editorState={editorState}
-          blockRendererFn={blockRenderer}
-          onChange={this.onChange}
-        />
-      </Fragment>
-    )
-  }
-
-  onChange = (editorState) => this.setState({ editorState })
-
-  insertBlock = () => {
-    const { editorState } = this.state
-
+  const insertBlock = () => {
     const contentState = editorState.getCurrentContent()
 
     const contentStateWithEntity = contentState.createEntity(
@@ -72,14 +55,23 @@ class App extends React.Component {
       currentContent: contentStateWithEntity,
     })
 
-    this.setState({
-      editorState: AtomicBlockUtils.insertAtomicBlock(
-        newEditorState,
-        entityKey,
-        ' ',
-      ),
-    })
+    setEditorState(
+      AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, ' '),
+    )
   }
+
+  return (
+    <div>
+      <button onClick={insertBlock}>Insert block</button>
+      <Editor
+        spellCheck
+        // plugins={plugins}
+        editorState={editorState}
+        onChange={setEditorState}
+        blockRendererFn={blockRenderer}
+      />
+    </div>
+  )
 }
 
 render(<App />, document.getElementById('root'))
