@@ -1,7 +1,5 @@
 import React from 'react'
 
-// import Editor from '@draft-js-plugins/editor'
-
 import { useMacros } from '../../hooks'
 import {
   MacrosWrapper,
@@ -14,11 +12,7 @@ import {
 import MacroEditor from '../MacroEditor/MacroEditor'
 
 export default () => {
-  const {
-    actions,
-    editorProps,
-    toJSON,
-  } = useMacros()
+  const { actions, editorProps, toJSON } = useMacros()
 
   return (
     <MacrosWrapper>

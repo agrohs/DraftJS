@@ -10,10 +10,7 @@ import createMentionPlugin from '@draft-js-plugins/mention'
 
 import { blockRenderer } from '../utils/render'
 import { ensureArray, lowercase } from '../utils/display'
-import {
-  MacroTextReplacement,
-  MacroMentionSuggestion,
-} from '../components'
+import { MacroTextReplacement, MacroMentionSuggestion } from '../components'
 import {
   SAMPLE_REPLACEMENTS,
   SAMPLE_MENTIONS,
@@ -157,7 +154,7 @@ export default () => {
     blockRenderer,
     editorState,
     onChange: setEditorState,
-    handleKeyCommand
+    handleKeyCommand,
   }
 
   return {
