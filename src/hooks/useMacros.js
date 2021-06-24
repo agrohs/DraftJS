@@ -37,9 +37,9 @@ export default () => {
     EditorState.createEmpty(),
   )
 
-  const wrappedInsertBlock = useCallback((data) => (
-    insertBlock(data)
-  ), [editorState])
+  // const wrappedInsertBlock = useCallback((data) => (
+  //   insertBlock(data)
+  // ), [editorState])
 
   const { addOns, plugins } = useMemo(() => {
     // const decoratorPlugin = {
@@ -67,17 +67,18 @@ export default () => {
       // TODO: optimize the regex?
       mentionRegExp: RICH_TEXT_EDITOR_MENTION_REGEX,
       entityMutability: 'IMMUTABLE',
-      mentionComponent: ({ children, entityKey, decoratedText, ...foo }) => {
-        console.log(`>>> > Foo > fooz`, foo)
-        console.log(`>>> > Foo > decoratedText`, decoratedText)
-        console.log(`>>> > Foo > entityKey`, entityKey)
+      mentionComponent: ({ children, entityKey, mention, decoratedText, ...foo }) => {
+        // console.log(`>>> > mention`, mention)
+        // console.log(`>>> > Foo > foo`, foo)
+        // console.log(`>>> > Foo > decoratedText`, decoratedText)
+        // console.log(`>>> > Foo > entityKey`, entityKey)
     
-        useLayoutEffect(() => {
-          wrappedInsertBlock({
-            provider: 'Bob',
-            mention: decoratedText,
-          })
-        }, [])
+        // useLayoutEffect(() => {
+        //   wrappedInsertBlock({
+        //     provider: 'Bob',
+        //     mention: decoratedText,
+        //   })
+        // }, [])
     
         return (children)
       },
@@ -151,8 +152,11 @@ export default () => {
   //#region ACTIONS
 
   const insertBlock = (data) => {
-    const { mention = ' ' } = data
+    const { mention: text = ' ' } = data
+    console.log(`>>> > insertBlock > text`, text)
     const contentState = editorState.getCurrentContent()
+    // const bar = contentState.getPlainText()
+    // console.log(`>>> > insertBlock > bar`, bar)
 
     const contentStateWithEntity = contentState.createEntity(
       'LINK', // NOTE: still no clue what this does, but think it will be important!
@@ -166,7 +170,7 @@ export default () => {
     })
 
     setEditorState(
-      AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, mention),
+      AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, text),
     )
   }
 
@@ -177,6 +181,13 @@ export default () => {
     mentionsOpen,
     onChange: handleSearchChange,
     onOpen: setMentionsOpen,
+    // onAddMention: ({ name }) => {
+    //   console.log('onAddMention', name)
+    //   insertBlock({
+    //     provider: 'Bob',
+    //     mention: name,
+    //   })
+    // }
   }
 
   const editorProps = {
