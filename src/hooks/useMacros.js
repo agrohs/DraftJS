@@ -5,7 +5,8 @@ import {
   EditorState,
   RichUtils,
 } from 'draft-js'
-import createMentionPlugin from '@draft-js-plugins/mention'
+// import createMentionPlugin from '@draft-js-plugins/mention'
+import createMentionPlugin from '../utils/mentions'
 
 import { blockRenderer } from '../utils/render'
 import { ensureArray, lowercase } from '../utils/display'
@@ -15,7 +16,7 @@ import {
   SAMPLE_REPLACEMENTS,
   SAMPLE_MENTIONS,
   RICH_TEXT_EDITOR_MENTION_REGEX,
-} from '../utils/mentions'
+} from '../utils/mentions/constants'
 
 // const findWithRegex = (regex, contentBlock, callback) => {
 //   const text = contentBlock.getText()
@@ -62,25 +63,26 @@ export default () => {
     //     },
     //   ],
     // }
+
     const mentionPlugin = createMentionPlugin({
       mentionTrigger: ['{{'],
       // TODO: optimize the regex?
       mentionRegExp: RICH_TEXT_EDITOR_MENTION_REGEX,
       entityMutability: 'IMMUTABLE',
-      mentionComponent: ({ children, entityKey, mention, decoratedText, ...foo }) => {
+      mentionComponent: ({ children, entityKey, mention, decoratedText, editorState: _editorState, ...foo }) => {
         // console.log(`>>> > mention`, mention)
         // console.log(`>>> > Foo > foo`, foo)
         // console.log(`>>> > Foo > decoratedText`, decoratedText)
         // console.log(`>>> > Foo > entityKey`, entityKey)
     
-        // useLayoutEffect(() => {
-        //   wrappedInsertBlock({
-        //     provider: 'Bob',
-        //     mention: decoratedText,
-        //   })
-        // }, [])
+        useLayoutEffect(() => {
+          insertBlock({
+            provider: 'Bob',
+            mention: decoratedText,
+          }, _editorState)
+        }, [])
     
-        return (children)
+        return (<span style={{ display: 'none' }}>children</span>)
       },
     })
 
@@ -151,10 +153,11 @@ export default () => {
 
   //#region ACTIONS
 
-  const insertBlock = (data) => {
+  const insertBlock = (data, _editorState) => {
     const { mention: text = ' ' } = data
     console.log(`>>> > insertBlock > text`, text)
-    const contentState = editorState.getCurrentContent()
+    const currentEditorState = _editorState || editorState
+    const contentState = currentEditorState.getCurrentContent()
     // const bar = contentState.getPlainText()
     // console.log(`>>> > insertBlock > bar`, bar)
 
@@ -165,7 +168,7 @@ export default () => {
     )
 
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey()
-    const newEditorState = EditorState.set(editorState, {
+    const newEditorState = EditorState.set(currentEditorState, {
       currentContent: contentStateWithEntity,
     })
 

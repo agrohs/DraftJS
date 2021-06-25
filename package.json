@@ -6,7 +6,7 @@
   "main": "index.js",
   "dependencies": {
     "@draft-js-plugins/editor": "4.1.0",
-    "@draft-js-plugins/mention": "4.5.2",
+    "@popperjs/core": "^2.9.2",
     "@zendeskgarden/container-utilities": "^0.5.4",
     "@zendeskgarden/css-bedrock": "^8.x",
     "@zendeskgarden/css-variables": "6.4.5",
@@ -31,9 +31,16 @@
     "@zendeskgarden/react-typography": "^8.x",
     "@zendeskgarden/svg-icons": "^6.x",
     "classnames": "latest",
+    "clsx": "^1.0.4",
     "draft-js": "latest",
+    "immutable": "~3.7.4",
+    "linaria": "^2.1.0",
+    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
+    "prop-types": "^15.5.8",
     "react": "latest",
     "react-dom": "latest",
+    "react-popper": "^2.2.5",
     "styled-components": "latest"
   },
   "devDependencies": {
