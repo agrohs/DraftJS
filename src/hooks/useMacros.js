@@ -1,21 +1,53 @@
-import React, { useState, useMemo, useCallback, useEffect, useLayoutEffect } from 'react'
+import React, { useState, useMemo } from 'react'
 import {
-  AtomicBlockUtils,
   convertToRaw,
+  AtomicBlockUtils,
   EditorState,
   RichUtils,
 } from 'draft-js'
 import createMentionPlugin from '@draft-js-plugins/mention'
 
-import { blockRenderer } from '../utils/render'
-import { ensureArray, lowercase } from '../utils/display'
-import { MentionSuggestion } from '../components'
+import { ensureArray, ensureObject, lowercase } from '../utils/display'
+import { Agnoponent, MentionSuggestion } from '../components'
+
 // import { MacroTextReplacement, MentionSuggestion } from '../components'
 import {
   SAMPLE_REPLACEMENTS,
   SAMPLE_MENTIONS,
   RICH_TEXT_EDITOR_MENTION_REGEX,
 } from '../utils/mentions'
+
+class BlockRenderrer {
+  static render(config, block) {
+    const type = block.getType()
+    const { component: Component, ...configProps } = ensureObject(config[type])
+
+    const RenderComponent = ({ blockProps, block, contentState }) => {
+      const entity = block.getEntityAt(0)
+    
+      if (!entity) {
+        return null
+      }
+    
+      const data = contentState.getEntity(entity).getData()
+      const renderProps = {
+        ...configProps,
+        ...blockProps,
+        ...data,
+      }
+
+      return (
+        <Component {...renderProps} />
+      )
+    }
+
+    return Component
+      ? {
+        component: RenderComponent,
+        ...configProps,
+      } : null
+  }
+}
 
 // const findWithRegex = (regex, contentBlock, callback) => {
 //   const text = contentBlock.getText()
@@ -30,6 +62,7 @@ import {
 //   }
 // }
 
+
 export default () => {
   const [filteredMentions, setFilteredMentions] = useState(SAMPLE_MENTIONS)
   const [mentionsOpen, setMentionsOpen] = useState(false)
@@ -41,7 +74,8 @@ export default () => {
   //   insertBlock(data)
   // ), [editorState])
 
-  const { addOns, plugins } = useMemo(() => {
+  const { addOns, plugins, blockRendererFn } = useMemo(() => {
+    
     // const decoratorPlugin = {
     //   decorators: [
     //     {
@@ -107,6 +141,12 @@ export default () => {
       // plugins: [decoratorPlugin, mentionPlugin],
       plugins: [mentionPlugin],
       addOns: [MacroMentions],
+      blockRendererFn: (block) => BlockRenderrer.render({
+        atomic: {
+          component: Agnoponent,
+          editable: false,
+        },
+      }, block)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -196,7 +236,7 @@ export default () => {
     addOnProps,
     editorState,
     handleKeyCommand,
-    blockRendererFn: blockRenderer,
+    blockRendererFn,
     onChange: setEditorState,
   }
 
