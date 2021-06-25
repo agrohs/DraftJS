@@ -1,15 +1,16 @@
 import React, { useState, useMemo, useCallback, useEffect, useLayoutEffect } from 'react'
 import {
-  AtomicBlockUtils,
   convertToRaw,
+  AtomicBlockUtils,
   EditorState,
   RichUtils,
 } from 'draft-js'
 import createMentionPlugin from '@draft-js-plugins/mention'
 
-import { blockRenderer } from '../utils/render'
 import { ensureArray, lowercase } from '../utils/display'
-import { MentionSuggestion } from '../components'
+import { BlockRenderrer } from '../classes/BlockRenderrer'
+import { Agnoponent, MentionSuggestion } from '../components'
+
 // import { MacroTextReplacement, MentionSuggestion } from '../components'
 import {
   SAMPLE_REPLACEMENTS,
@@ -30,6 +31,7 @@ import {
 //   }
 // }
 
+
 export default () => {
   const [filteredMentions, setFilteredMentions] = useState(SAMPLE_MENTIONS)
   const [mentionsOpen, setMentionsOpen] = useState(false)
@@ -41,7 +43,8 @@ export default () => {
   //   insertBlock(data)
   // ), [editorState])
 
-  const { addOns, plugins } = useMemo(() => {
+  const { addOns, plugins, blockRendererFn } = useMemo(() => {
+    
     // const decoratorPlugin = {
     //   decorators: [
     //     {
@@ -107,6 +110,12 @@ export default () => {
       // plugins: [decoratorPlugin, mentionPlugin],
       plugins: [mentionPlugin],
       addOns: [MacroMentions],
+      blockRendererFn: (block) => BlockRenderrer.render({
+        atomic: {
+          component: Agnoponent,
+          editable: false,
+        },
+      }, block)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -196,7 +205,7 @@ export default () => {
     addOnProps,
     editorState,
     handleKeyCommand,
-    blockRendererFn: blockRenderer,
+    blockRendererFn,
     onChange: setEditorState,
   }
 
