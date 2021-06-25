@@ -40,7 +40,6 @@ export default function Mention(props) {
     contentState,
     getEditorState,
   } = props;
-  console.log('props:', props)
 
   const combinedClassName = clsx(theme.mention, className);
   const mention = contentState.getEntity(entityKey).getData().mention;

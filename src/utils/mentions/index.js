@@ -109,7 +109,7 @@ export default (config = {}) => {
     <MentionSuggestionsComponent {...props} {...mentionSearchProps} />
   );
   const DecoratedMention = (props) => (
-    <Mention {...props} theme={theme} editorState={store.getEditorState} mentionComponent={mentionComponent} />
+    <Mention {...props} theme={theme} mentionComponent={mentionComponent} />
   );
   const DecoratedMentionSuggestionsPortal = (props) => (
     <MentionSuggestionsPortal {...props} store={store} />
