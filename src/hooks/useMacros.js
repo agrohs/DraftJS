@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect, useLayoutEffect } from 'react'
+import React, { useState, useMemo, useLayoutEffect } from 'react'
 import {
   AtomicBlockUtils,
   convertToRaw,
@@ -6,30 +6,14 @@ import {
   RichUtils,
 } from 'draft-js'
 // import createMentionPlugin from '@draft-js-plugins/mention'
-import createMentionPlugin from '../utils/mentions'
 
+import createMentionPlugin from '../utils/mentions'
 import { blockRenderer } from '../utils/render'
 import { ensureArray, lowercase } from '../utils/display'
 import { MentionSuggestion } from '../components'
-// import { MacroTextReplacement, MentionSuggestion } from '../components'
 import {
-  SAMPLE_REPLACEMENTS,
   SAMPLE_MENTIONS,
-  RICH_TEXT_EDITOR_MENTION_REGEX,
 } from '../utils/mentions/constants'
-
-// const findWithRegex = (regex, contentBlock, callback) => {
-//   const text = contentBlock.getText()
-//   let matchArr
-//   let start
-//   let end
-
-//   while ((matchArr = regex.exec(text)) !== null) {
-//     start = matchArr.index
-//     end = start + matchArr[0].length
-//     callback(start, end)
-//   }
-// }
 
 export default () => {
   const [filteredMentions, setFilteredMentions] = useState(SAMPLE_MENTIONS)
@@ -38,43 +22,9 @@ export default () => {
     EditorState.createEmpty(),
   )
 
-  // const wrappedInsertBlock = useCallback((data) => (
-  //   insertBlock(data)
-  // ), [editorState])
-
   const { addOns, plugins } = useMemo(() => {
-    // const decoratorPlugin = {
-    //   decorators: [
-    //     {
-    //       strategy: (contentBlock, callback) => {
-    //         findWithRegex(
-    //           new RegExp(/\{{[^{}}]*\}}/, 'g'),
-    //           contentBlock,
-    //           callback,
-    //         )
-    //       },
-    //       component: (props) => (
-    //         <MacroTextReplacement
-    //           SAMPLE_REPLACEMENTS={SAMPLE_REPLACEMENTS}
-    //           setMentionsOpen={setMentionsOpen}
-    //           {...props}
-    //         />
-    //       ),
-    //     },
-    //   ],
-    // }
-
     const mentionPlugin = createMentionPlugin({
-      mentionTrigger: ['{{'],
-      // TODO: optimize the regex?
-      mentionRegExp: RICH_TEXT_EDITOR_MENTION_REGEX,
-      entityMutability: 'IMMUTABLE',
-      mentionComponent: ({ children, entityKey, mention, decoratedText, editorState: _editorState, ...foo }) => {
-        // console.log(`>>> > mention`, mention)
-        // console.log(`>>> > Foo > foo`, foo)
-        // console.log(`>>> > Foo > decoratedText`, decoratedText)
-        // console.log(`>>> > Foo > entityKey`, entityKey)
-    
+      mentionComponent: ({ decoratedText, editorState: _editorState }) => {    
         useLayoutEffect(() => {
           insertBlock({
             provider: 'Bob',
@@ -106,20 +56,11 @@ export default () => {
     )
 
     return {
-      // plugins: [decoratorPlugin, mentionPlugin],
       plugins: [mentionPlugin],
       addOns: [MacroMentions],
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  // useEffect(() => {
-  //   ensureArray(plugins).forEach((plugin) => {
-  //     if (plugin.store) {
-  //       plugin.store.setEditorState(editorState)
-  //     }
-  //   })
-  // }, [editorState, plugins])
 
   const toJSON = () => {
     const contentState = editorState.getCurrentContent()
@@ -155,18 +96,13 @@ export default () => {
 
   const insertBlock = (data, _editorState) => {
     const { mention: text = ' ' } = data
-    console.log(`>>> > insertBlock > text`, text)
     const currentEditorState = _editorState || editorState
     const contentState = currentEditorState.getCurrentContent()
-    // const bar = contentState.getPlainText()
-    // console.log(`>>> > insertBlock > bar`, bar)
-
     const contentStateWithEntity = contentState.createEntity(
       'LINK', // NOTE: still no clue what this does, but think it will be important!
       'IMMUTABLE',
       data,
     )
-
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey()
     const newEditorState = EditorState.set(currentEditorState, {
       currentContent: contentStateWithEntity,
@@ -184,13 +120,6 @@ export default () => {
     mentionsOpen,
     onChange: handleSearchChange,
     onOpen: setMentionsOpen,
-    // onAddMention: ({ name }) => {
-    //   console.log('onAddMention', name)
-    //   insertBlock({
-    //     provider: 'Bob',
-    //     mention: name,
-    //   })
-    // }
   }
 
   const editorProps = {
