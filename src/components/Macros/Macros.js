@@ -30,7 +30,10 @@ export default () => {
         </ActionButton>
       ))}
       <EditorWrapper>
-        <MacroEditor {...editorProps} />
+        <MacroEditor
+          spellCheck
+          {...editorProps}
+        />
       </EditorWrapper>
       <h3>ContentState</h3>
       <DebugWrapper>
