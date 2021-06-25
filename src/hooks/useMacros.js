@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect, useLayoutEffect } from 'react'
+import React, { useState, useMemo } from 'react'
 import {
   convertToRaw,
   AtomicBlockUtils,
@@ -7,8 +7,7 @@ import {
 } from 'draft-js'
 import createMentionPlugin from '@draft-js-plugins/mention'
 
-import { ensureArray, lowercase } from '../utils/display'
-import { BlockRenderrer } from '../classes/BlockRenderrer'
+import { ensureArray, ensureObject, lowercase } from '../utils/display'
 import { Agnoponent, MentionSuggestion } from '../components'
 
 // import { MacroTextReplacement, MentionSuggestion } from '../components'
@@ -17,6 +16,38 @@ import {
   SAMPLE_MENTIONS,
   RICH_TEXT_EDITOR_MENTION_REGEX,
 } from '../utils/mentions'
+
+class BlockRenderrer {
+  static render(config, block) {
+    const type = block.getType()
+    const { component: Component, ...configProps } = ensureObject(config[type])
+
+    const RenderComponent = ({ blockProps, block, contentState }) => {
+      const entity = block.getEntityAt(0)
+    
+      if (!entity) {
+        return null
+      }
+    
+      const data = contentState.getEntity(entity).getData()
+      const renderProps = {
+        ...configProps,
+        ...blockProps,
+        ...data,
+      }
+
+      return (
+        <Component {...renderProps} />
+      )
+    }
+
+    return Component
+      ? {
+        component: RenderComponent,
+        ...configProps,
+      } : null
+  }
+}
 
 // const findWithRegex = (regex, contentBlock, callback) => {
 //   const text = contentBlock.getText()
